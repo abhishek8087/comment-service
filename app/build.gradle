@@ -1,0 +1,79 @@
+plugins {
+    id 'org.springframework.boot' version '2.7.3'
+    id "org.openapi.generator" version "4.2.2"
+    id 'com.github.sherter.google-java-format'
+}
+
+group 'com.social'
+version '0.0.1-SNAPSHOT'
+
+bootJar {
+    enabled = true
+}
+
+jar {
+    enabled = true
+}
+
+tasks.verifyGoogleJavaFormat.ignoreFailures = true
+sourceSets.main.java.srcDirs = ['build/generated/src/main/java','src/main/java']
+
+openApiGenerate {
+    verbose = false
+    generatorName = "spring"
+    inputSpec = "$projectDir/src/main/spec/reference/comment-api.yml".toString()
+    outputDir = "$buildDir/generated".toString()
+    apiPackage = "com.social.comment.api"
+    modelPackage = "com.social.comment.domain"
+    apiFilesConstrainedTo = [""]
+    modelFilesConstrainedTo = [""]
+    validateSpec = true
+    configOptions = [
+            dateLibrary: "java8",
+            library: "spring-boot",
+            interfaceOnly: "true",
+            useTags: "true",
+            java8:"true",
+            useBeanValidation:"true",
+            performBeanValidation:"true",
+            serviceInterface:"true",
+            serviceImplementation:"false",
+            hideGenerationTimestamp:"true",
+            title:"CommentApi",
+            skipDefaultInterface:"true",
+            apiFirst:"false",
+            unhandledException:"true"
+    ]
+}
+
+task generateSchemaFile( type: org.openapitools.generator.gradle.plugin.tasks.GenerateTask,
+        group: "OpenAPI Tools"){
+    generatorName = "openapi"
+    inputSpec = "$projectDir/src/main/spec/reference/comment-api.yml".toString()
+    outputDir = "$buildDir/src/main/resources".toString()
+    supportingFilesConstrainedTo = [""]
+    validateSpec = true
+    configOptions = [
+            allowUnicodeIdentifiers: "true"
+    ]
+}
+
+task codegen(dependsOn: ['openApiGenerate', 'generateSchemaFile'],
+        group: "OpenAPI Tools")
+
+compileJava.dependsOn tasks.codegen
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation "io.springfox:springfox-swagger2:2.9.2"
+    implementation 'org.openapitools:jackson-databind-nullable:0.1.0'
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
+    implementation group: 'org.hibernate', name: 'hibernate-validator', version: '5.2.5.Final'
+    implementation "javax.validation:validation-api"
+    implementation project(':entities')
+    implementation project(':service')
+}
+
+test {
+    useJUnitPlatform()
+}

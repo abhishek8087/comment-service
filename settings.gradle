@@ -1,0 +1,6 @@
+rootProject.name = 'comments-service'
+include 'app'
+include 'service'
+include 'entities'
+include 'dao'
+

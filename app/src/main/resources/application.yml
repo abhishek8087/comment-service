@@ -1,0 +1,9 @@
+spring:
+    data:
+        mongodb:
+            host: localhost
+            port: 27017
+            database: commentDb
+            repositories:
+                enabled: true
+            auto-index-creation: true

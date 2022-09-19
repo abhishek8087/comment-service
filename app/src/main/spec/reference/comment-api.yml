@@ -1,0 +1,269 @@
+openapi: 3.0.0
+x-stoplight:
+  id: yqh431t43lb65
+info:
+  title: Comments API
+  version: '1.0'
+servers:
+  - url: 'http://localhost:8080'
+paths:
+  /comment:
+    parameters: []
+    post:
+      summary: Add new comment
+      operationId: add-comment
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentResponse'
+      description: Add a new comment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentRequest'
+      tags:
+        - Comment
+  '/comment/{comment_id}/like/{user_id}':
+    parameters:
+      - schema:
+          type: string
+        name: comment_id
+        in: path
+        required: true
+        description: comment id
+      - schema:
+          type: string
+        name: user_id
+        in: path
+        required: true
+    put:
+      summary: Add like to a comment
+      operationId: add-like
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentResponse'
+      description: Add a like on comment
+      tags:
+        - Comment
+  '/comment/{comment_id}/dislike/{user_id}':
+    put:
+      summary: Add dislike to a comment
+      operationId: add-dislike
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentResponse'
+      tags:
+        - Comment
+    parameters:
+      - schema:
+          type: string
+        name: comment_id
+        in: path
+        required: true
+        description: comment id of comment to dislike
+      - schema:
+          type: string
+        name: user_id
+        in: path
+        required: true
+  '/comment/{comment_id}/reply':
+    post:
+      summary: Add reply on comment
+      operationId: add-reply
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentRequest'
+      description: ''
+      tags:
+        - Comment
+    parameters:
+      - schema:
+          type: string
+        name: comment_id
+        in: path
+        required: true
+        description: Comment id of comment to reply on.
+  '/comment/{comment_id}/replies/{page_number}':
+    get:
+      summary: Get more replies on a comment
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CommentResponse'
+      operationId: get-more-replies
+      tags:
+        - Comment
+    parameters:
+      - schema:
+          type: string
+        name: comment_id
+        in: path
+        required: true
+      - schema:
+          type: integer
+        name: page_number
+        in: path
+        required: true
+  '/comment/{comment_id}':
+    parameters:
+      - schema:
+          type: string
+        name: comment_id
+        in: path
+        required: true
+        description: comment id
+    get:
+      summary: ''
+      operationId: get-comment-by-id
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentResponse'
+      tags:
+        - Comment
+      description: Get comment by comment id
+  /user/add:
+    post:
+      summary: Add user to database
+      operationId: add-user
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      tags:
+        - User
+    parameters: []
+  '/comment/{comment_id}/like':
+    parameters:
+      - schema:
+          type: string
+        name: comment_id
+        in: path
+        required: true
+    get:
+      summary: Get users who liked comment
+      tags:
+        - Comment
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+      operationId: get-users-who-liked
+      description: Get users who liked comment
+  '/comment/{comment_id}/dislike':
+    parameters:
+      - schema:
+          type: string
+        name: comment_id
+        in: path
+        required: true
+    get:
+      summary: Get users who disliked comment
+      tags:
+        - Comment
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+      operationId: get-users-who-disliked
+      description: Get users who disliked comment
+components:
+  schemas:
+    CommentRequest:
+      title: CommentRequest
+      type: object
+      description: Comment request body
+      properties:
+        text:
+          description: Unique identifier for the given user.
+          type: string
+        author:
+          type: string
+      required:
+        - text
+        - author
+    CommentResponse:
+      title: CommentResponse
+      x-stoplight:
+        id: bfkf19fmsmjoe
+      type: object
+      properties:
+        id:
+          type: string
+        text:
+          type: string
+        replies:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommentResponse'
+        likes:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+        dislikes:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+        createdAt:
+          type: string
+        author:
+          $ref: '#/components/schemas/User'
+    User:
+      title: User
+      x-stoplight:
+        id: 8ypb0qq1ptdpo
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        profile_url:
+          type: string
