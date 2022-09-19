@@ -19,6 +19,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CommentResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       description: Add a new comment
       requestBody:
         content:
@@ -50,6 +56,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CommentResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       description: Add a like on comment
       tags:
         - Comment
@@ -64,6 +76,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CommentResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       tags:
         - Comment
     parameters:
@@ -89,6 +107,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CommentResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       requestBody:
         content:
           application/json:
@@ -116,6 +140,12 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/CommentResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       operationId: get-more-replies
       tags:
         - Comment
@@ -148,6 +178,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CommentResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       tags:
         - Comment
       description: Get comment by comment id
@@ -162,6 +198,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       requestBody:
         content:
           application/json:
@@ -170,11 +212,16 @@ paths:
       tags:
         - User
     parameters: []
-  '/comment/{comment_id}/like':
+  '/comment/{comment_id}/like/{page_number}':
     parameters:
       - schema:
           type: string
         name: comment_id
+        in: path
+        required: true
+      - schema:
+          type: integer
+        name: page_number
         in: path
         required: true
     get:
@@ -190,13 +237,24 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/User'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       operationId: get-users-who-liked
       description: Get users who liked comment
-  '/comment/{comment_id}/dislike':
+  '/comment/{comment_id}/dislike/{page_number}':
     parameters:
       - schema:
           type: string
         name: comment_id
+        in: path
+        required: true
+      - schema:
+          type: integer
+        name: page_number
         in: path
         required: true
     get:
@@ -212,6 +270,12 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/User'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       operationId: get-users-who-disliked
       description: Get users who disliked comment
 components:
@@ -244,13 +308,9 @@ components:
           items:
             $ref: '#/components/schemas/CommentResponse'
         likes:
-          type: array
-          items:
-            $ref: '#/components/schemas/User'
+          type: integer
         dislikes:
-          type: array
-          items:
-            $ref: '#/components/schemas/User'
+          type: integer
         createdAt:
           type: string
         author:
@@ -266,4 +326,14 @@ components:
         name:
           type: string
         profile_url:
+          type: string
+    ErrorResponse:
+      title: ErrorResponse
+      x-stoplight:
+        id: rh1aefl9lvbmm
+      type: object
+      properties:
+        type:
+          type: string
+        message:
           type: string

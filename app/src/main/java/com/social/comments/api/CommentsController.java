@@ -3,11 +3,10 @@ package com.social.comments.api;
 import com.social.comment.api.CommentApi;
 import com.social.comment.domain.CommentRequest;
 import com.social.comment.domain.CommentResponse;
-import com.social.comment.domain.User;
 import com.social.comments.CommentsService;
 import com.social.comments.mapper.RequestMapper;
 import com.social.comments.mapper.ResponseMapper;
-import com.soical.comments.DetailedComment;
+import com.social.comments.DetailedComment;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +18,8 @@ public class CommentsController implements CommentApi {
 
  @Autowired
  CommentsService commentsService;
-
  @Autowired
  RequestMapper requestMapper;
-
  @Autowired
  ResponseMapper responseMapper;
 
@@ -71,13 +68,13 @@ public class CommentsController implements CommentApi {
 
 
  @Override
- public ResponseEntity<List<com.social.comment.domain.User>> getUsersWhoDisliked(String commentId) {
-  return ResponseEntity.ok(responseMapper.entityToDomain(commentsService.getUsersWhoDisliked(commentId))) ;
+ public ResponseEntity<List<com.social.comment.domain.User>> getUsersWhoDisliked(String commentId, Integer pageNumber) {
+  return ResponseEntity.ok(responseMapper.entityToDomain(commentsService.getUsersWhoDisliked(commentId, pageNumber))) ;
  }
 
  @Override
- public ResponseEntity<List<com.social.comment.domain.User>> getUsersWhoLiked(String commentId) {
-  return ResponseEntity.ok(responseMapper.entityToDomain(commentsService.getUsersWhoLiked(commentId))) ;
+ public ResponseEntity<List<com.social.comment.domain.User>> getUsersWhoLiked(String commentId, Integer pageNumber) {
+  return ResponseEntity.ok(responseMapper.entityToDomain(commentsService.getUsersWhoLiked(commentId, pageNumber))) ;
  }
 
 }

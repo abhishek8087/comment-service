@@ -72,6 +72,7 @@ dependencies {
     implementation "javax.validation:validation-api"
     implementation project(':entities')
     implementation project(':service')
+    implementation project(':exception')
 }
 
 test {

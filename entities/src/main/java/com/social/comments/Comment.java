@@ -1,4 +1,4 @@
-package com.soical.comments;
+package com.social.comments;
 
 import java.util.ArrayList;
 import java.util.Date;

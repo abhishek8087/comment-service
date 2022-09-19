@@ -4,7 +4,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation project(':entities')
     implementation project(':dao')
+    implementation project(':exception')
     implementation 'org.projectlombok:lombok'
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 }
 
 jar {

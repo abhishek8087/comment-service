@@ -15,7 +15,7 @@ public class UserController implements UserApi {
 
   @Override
   public ResponseEntity<User> addUser(User user) {
-   userService.addUser(com.soical.comments.User.builder().id(user.getId())
+   userService.addUser(com.social.comments.User.builder().id(user.getId())
         .name(user.getName())
         .profileUrl(user.getProfileUrl())
         .build());

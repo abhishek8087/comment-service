@@ -1,6 +1,5 @@
 package com.social.comments;
 
-import com.soical.comments.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

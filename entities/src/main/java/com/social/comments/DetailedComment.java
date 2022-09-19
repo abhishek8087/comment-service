@@ -1,4 +1,4 @@
-package com.soical.comments;
+package com.social.comments;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,8 +14,8 @@ public class DetailedComment {
   private String id;
   private String text;
   private List<DetailedComment> replies = new ArrayList<>();
-  private List<User> likes = new ArrayList<>();
-  private List<User> dislikes = new ArrayList<>();
+  private Integer likes;
+  private Integer dislikes;
   private Date createdAt;
   private User author;
 }

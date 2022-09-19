@@ -1,4 +1,4 @@
-package com.soical.comments;
+package com.social.comments;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

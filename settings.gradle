@@ -3,4 +3,5 @@ include 'app'
 include 'service'
 include 'entities'
 include 'dao'
+include 'exception'
 

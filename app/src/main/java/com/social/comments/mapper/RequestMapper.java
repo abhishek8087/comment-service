@@ -1,7 +1,7 @@
 package com.social.comments.mapper;
 
 import com.social.comment.domain.CommentRequest;
-import com.soical.comments.Comment;
+import com.social.comments.Comment;
 import org.springframework.stereotype.Component;
 
 @Component
