@@ -27,50 +27,13 @@ public class CommentUtil {
 
   public DetailedComment getComment(String id){
     Comment comment = commentRepository.findById(id).orElseGet(null);
-    List<String> replyList = comment.getReplies().stream().limit(MAX_REPLIES).collect(Collectors.toList());
-    List<Comment> replies = StreamSupport.stream(commentRepository.findAllById(replyList).spliterator(), false)
-        .collect(Collectors.toList());
-    List<User> likedUsers = StreamSupport.stream(userRepository.findAllById(comment.getLikes()).spliterator(), false)
-        .collect(Collectors.toList());
-    List<User> disLikedUsers = StreamSupport.stream(userRepository.findAllById(comment.getDislikes()).spliterator(), false)
-        .collect(Collectors.toList());
-    return buildDetailedComment(comment, commentToDetailedCommentList(replies), likedUsers, disLikedUsers);
-  }
-
-  private List<DetailedComment> commentToDetailedCommentList(List<Comment> comments){
-    List<DetailedComment> detailedComments = new ArrayList<>();
-    for(Comment comment : comments){
-      detailedComments.add(getComment(comment.getId()));
-    }
-
-    return detailedComments;
+    return buildDetailedComment(comment);
   }
 
   public DetailedComment save(Comment comment){
     Comment savedComment = commentRepository.save(comment);
-    List<String> replyList = savedComment.getReplies().stream().limit(MAX_REPLIES).collect(Collectors.toList());
-    List<Comment> replies = StreamSupport.stream(commentRepository.findAllById(replyList).spliterator(), false)
-        .collect(Collectors.toList());
-    List<User> likedUsers = StreamSupport.stream(userRepository.findAllById(savedComment.getLikes()).spliterator(), false)
-        .collect(Collectors.toList());
-    List<User> disLikedUsers = StreamSupport.stream(userRepository.findAllById(savedComment.getDislikes()).spliterator(), false)
-        .collect(Collectors.toList());
-    return buildDetailedComment(savedComment, commentToDetailedCommentList(replies), likedUsers, disLikedUsers);
+    return buildDetailedComment(savedComment);
   }
-
-  private DetailedComment buildDetailedComment(Comment comment
-      , List<DetailedComment> detailedComments, List<User> likedUsers, List<User> disLikedUsers){
-    DetailedComment detailedComment = new DetailedComment();
-    detailedComment.setText(comment.getText());
-    detailedComment.setId(comment.getId());
-    detailedComment.setAuthor(userRepository.findById(comment.getAuthor()).orElseGet(null));
-    detailedComment.setCreatedAt(comment.getCreatedAt());
-    detailedComment.setReplies(detailedComments);
-    detailedComment.setLikes(likedUsers);
-    detailedComment.setDislikes(disLikedUsers);
-    return detailedComment;
-  }
-
   public DetailedComment addLike(String userId, String commentId){
     Comment comment = commentRepository.findById(commentId).orElseGet(null);
     Comment savedComment = null;
@@ -78,14 +41,7 @@ public class CommentUtil {
       comment.getLikes().add(userId);
       savedComment = commentRepository.save(comment);
     }
-    List<String> replyList = savedComment.getReplies().stream().limit(MAX_REPLIES).collect(Collectors.toList());
-    List<Comment> replies = StreamSupport.stream(commentRepository.findAllById(replyList).spliterator(), false)
-        .collect(Collectors.toList());
-    List<User> likedUsers = StreamSupport.stream(userRepository.findAllById(savedComment.getLikes()).spliterator(), false)
-        .collect(Collectors.toList());
-    List<User> disLikedUsers = StreamSupport.stream(userRepository.findAllById(savedComment.getDislikes()).spliterator(), false)
-        .collect(Collectors.toList());
-    return buildDetailedComment(savedComment, commentToDetailedCommentList(replies),likedUsers, disLikedUsers);
+    return buildDetailedComment(savedComment);
   }
 
   public DetailedComment addDislike(String userId, String commentId){
@@ -95,14 +51,7 @@ public class CommentUtil {
       comment.getDislikes().add(userId);
       savedComment = commentRepository.save(comment);
     }
-    List<String> replyList = savedComment.getReplies().stream().limit(MAX_REPLIES).collect(Collectors.toList());
-    List<Comment> replies = StreamSupport.stream(commentRepository.findAllById(replyList).spliterator(), false)
-        .collect(Collectors.toList());
-    List<User> likedUsers = StreamSupport.stream(userRepository.findAllById(savedComment.getLikes()).spliterator(), false)
-        .collect(Collectors.toList());
-    List<User> disLikedUsers = StreamSupport.stream(userRepository.findAllById(savedComment.getDislikes()).spliterator(), false)
-        .collect(Collectors.toList());
-    return buildDetailedComment(savedComment, commentToDetailedCommentList(replies),likedUsers, disLikedUsers);
+    return buildDetailedComment(savedComment);
   }
   public DetailedComment addReply(String commentId, Comment reply){
     Comment comment = commentRepository.findById(commentId).orElseGet(null);
@@ -113,14 +62,7 @@ public class CommentUtil {
       comment.getReplies().add(savedReply.getId());
       savedComment = commentRepository.save(comment);
     }
-    List<String> replyList = savedComment.getReplies().stream().limit(MAX_REPLIES).collect(Collectors.toList());
-    List<Comment> replies = StreamSupport.stream(commentRepository.findAllById(replyList).spliterator(), false)
-        .collect(Collectors.toList());
-    List<User> likedUsers = StreamSupport.stream(userRepository.findAllById(savedComment.getLikes()).spliterator(), false)
-        .collect(Collectors.toList());
-    List<User> disLikedUsers = StreamSupport.stream(userRepository.findAllById(savedComment.getDislikes()).spliterator(), false)
-        .collect(Collectors.toList());
-    return buildDetailedComment(savedComment, commentToDetailedCommentList(replies),likedUsers, disLikedUsers);
+    return buildDetailedComment(savedComment);
   }
 
   public List<DetailedComment> getPaginatedReplies(String commentId, Integer pageNumber){
@@ -147,5 +89,33 @@ public class CommentUtil {
     Comment comment = commentRepository.findById(commentId).orElseGet(null);
     return StreamSupport.stream(userRepository.findAllById(comment.getDislikes()).spliterator(), false)
         .collect(Collectors.toList());
+  }
+
+  private DetailedComment buildDetailedComment(Comment comment){
+    List<String> replyList = comment.getReplies().stream().limit(MAX_REPLIES).collect(Collectors.toList());
+    List<Comment> replies = StreamSupport.stream(commentRepository.findAllById(replyList).spliterator(), false)
+        .collect(Collectors.toList());
+    List<User> likedUsers = StreamSupport.stream(userRepository.findAllById(comment.getLikes()).spliterator(), false)
+        .collect(Collectors.toList());
+    List<User> disLikedUsers = StreamSupport.stream(userRepository.findAllById(comment.getDislikes()).spliterator(), false)
+        .collect(Collectors.toList());
+    List<DetailedComment> detailedComments = commentToDetailedCommentList(replies);
+    DetailedComment detailedComment = new DetailedComment();
+    detailedComment.setText(comment.getText());
+    detailedComment.setId(comment.getId());
+    detailedComment.setAuthor(userRepository.findById(comment.getAuthor()).orElseGet(null));
+    detailedComment.setCreatedAt(comment.getCreatedAt());
+    detailedComment.setReplies(detailedComments);
+    detailedComment.setLikes(likedUsers);
+    detailedComment.setDislikes(disLikedUsers);
+    return detailedComment;
+  }
+
+  private List<DetailedComment> commentToDetailedCommentList(List<Comment> comments){
+    List<DetailedComment> detailedComments = new ArrayList<>();
+    for(Comment comment : comments){
+      detailedComments.add(getComment(comment.getId()));
+    }
+    return detailedComments;
   }
 }
