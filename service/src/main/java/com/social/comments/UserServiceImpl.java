@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
     if(userOptional.isPresent()){
       return userOptional.get();
     }
-    throw new NotFoundException(USER_ID_INVALID);
+    throw new NotFoundException(USER_ID_INVALID + " " + userId);
   }
 
 

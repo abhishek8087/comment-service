@@ -32,8 +32,12 @@ public class CommentsServiceImpl implements CommentsService {
   }
   public DetailedComment addComment(Comment comment){
     userService.getUser(comment.getAuthor());
-    Comment savedComment = commentRepository.save(comment);
-    return buildDetailedComment(savedComment);
+    try {
+      Comment savedComment = commentRepository.save(comment);
+      return buildDetailedComment(savedComment);
+    }catch (Exception ex){
+      throw new UpstreamResourceException("Mongo Db command failed.");
+    }
   }
 
   public DetailedComment addLike(String userId, String commentId){
@@ -122,7 +126,7 @@ public class CommentsServiceImpl implements CommentsService {
     if(commentOptional.isPresent()){
       return commentOptional.get();
     }
-    throw new NotFoundException(COMMENT_ID_INVALID);
+    throw new NotFoundException(COMMENT_ID_INVALID + " " + commentId);
   }
 
 }
