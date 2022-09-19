@@ -7,11 +7,9 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.stereotype.Service;
 
 @Service
-@EnableMongoRepositories(basePackages = "com.social.comments")
 public class CommentsServiceImpl implements CommentsService {
 
   @Autowired
@@ -33,6 +31,7 @@ public class CommentsServiceImpl implements CommentsService {
     return buildDetailedComment(comment);
   }
   public DetailedComment addComment(Comment comment){
+    userService.getUser(comment.getAuthor());
     Comment savedComment = commentRepository.save(comment);
     return buildDetailedComment(savedComment);
   }

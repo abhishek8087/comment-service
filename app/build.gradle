@@ -73,6 +73,7 @@ dependencies {
     implementation project(':entities')
     implementation project(':service')
     implementation project(':exception')
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 }
 
 test {
