@@ -71,6 +71,21 @@ public class CommentsServiceImpl implements CommentsService {
     }
     return detailedComments;
   }
+
+  @Override
+  public List<DetailedComment> getCommentBulk(List<String> commentId, Integer pageNumber) {
+    int start = pageNumber * COMMENT_PAGE_SIZE;
+    int end = start + COMMENT_PAGE_SIZE;
+    if(end > commentId.size()) end = commentId.size();
+    if(start > commentId.size()) throw new NotFoundException("No more comments found.");
+    List<String> paginatedComments = commentId.subList(start, end);
+    List<DetailedComment> detailedComments = new ArrayList<>();
+    for(String comment : paginatedComments){
+      detailedComments.add(getCommentById(comment));
+    }
+    return detailedComments;
+  }
+
   public DetailedComment addDislike(String userId, String commentId) {
     Comment comment = getComment(commentId);
     User user = userService.getUser(userId);
@@ -127,6 +142,11 @@ public class CommentsServiceImpl implements CommentsService {
       return commentOptional.get();
     }
     throw new NotFoundException(COMMENT_ID_INVALID + " " + commentId);
+  }
+
+  private List<Comment> getCommentsByIds(List<String> commentIds){
+    return StreamSupport.stream(commentRepository.findAllById(commentIds).spliterator(), false)
+        .collect(Collectors.toList());
   }
 
 }

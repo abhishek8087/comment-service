@@ -33,6 +33,31 @@ paths:
               $ref: '#/components/schemas/CommentRequest'
       tags:
         - Comment
+    get:
+      summary: Get bulk comments
+      operationId: get-comment-bulk
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CommentResponse'
+      parameters:
+        - schema:
+            type: integer
+          in: query
+          name: page_number
+        - schema:
+            type: array
+            items:
+              type: string
+          in: query
+          name: comment_id
+      tags:
+        - Comment
   '/comment/{comment_id}/like/{user_id}':
     parameters:
       - schema:
@@ -278,6 +303,13 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
       operationId: get-users-who-disliked
       description: Get users who disliked comment
+  '/comment/{page_number}':
+    parameters:
+      - schema:
+          type: integer
+        name: page_number
+        in: path
+        required: true
 components:
   schemas:
     CommentRequest:

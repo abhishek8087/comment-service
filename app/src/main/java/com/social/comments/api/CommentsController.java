@@ -50,6 +50,17 @@ public class CommentsController implements CommentApi {
  }
 
  @Override
+ public ResponseEntity<List<CommentResponse>> getCommentBulk(Integer pageNumber,
+     List<String> commentId) {
+  List<DetailedComment> detailedComments = commentsService.getCommentBulk(commentId, pageNumber);
+  List<CommentResponse> commentResponses = new ArrayList<>();
+  for(DetailedComment detailedComment : detailedComments){
+   commentResponses.add(responseMapper.entityToDomain(detailedComment));
+  }
+  return ResponseEntity.ok(commentResponses);
+ }
+
+ @Override
  public ResponseEntity<CommentResponse> getCommentById(String commentId) {
   DetailedComment comment = commentsService.getCommentById(commentId);
   return ResponseEntity.ok(responseMapper.entityToDomain(comment));

@@ -9,6 +9,7 @@ public interface CommentsService {
   DetailedComment addLike(String userId, String commentId);
   DetailedComment addReply(String commentId,Comment comment);
   List<DetailedComment> getPaginatedReplies(String commentId, Integer pageNumber);
+  List<DetailedComment> getCommentBulk(List<String> commentId, Integer pageNumber);
   DetailedComment addDislike(String userId, String commentId);
   List<User> getUsersWhoDisliked(String commentId, Integer pageNumber);
   List<User> getUsersWhoLiked(String commentId, Integer pageNumber);
