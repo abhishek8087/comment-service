@@ -1,6 +1,8 @@
 # comment-service
 A service to add new comments. Add dislike, like and replies to the comment
 
+Assumptions -> The service that stores a social media post to multiple comments mapping is handled by other team and is not implemented as part of this solution. 
+
 Postman collection or OpenAPI spec -> https://github.com/abhishek8087/comment-service/blob/master/app/src/main/spec/reference/comment-api.yml
 
 APIs to render comments
